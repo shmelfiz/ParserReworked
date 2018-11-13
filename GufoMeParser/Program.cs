@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
+using System.Threading.Tasks;
 using GufoMeParser.BLL.Infrastructure;
 using GufoMeParser.BLL.Managers.Interfaces;
 using GufoMeParser.BLL.Parsers.GufoMe.Classes;
@@ -105,11 +106,14 @@ namespace GufoMeParser
             }
         }       
 
-        private static void Cancel(object sender, ConsoleCancelEventArgs args)
+        private static async void Cancel(object sender, ConsoleCancelEventArgs args)
         {
             if(args.Cancel)
             {
-                Environment.Exit(0);
+                await Task.Factory.StartNew(() =>
+                {
+                    Environment.Exit(0);
+                });
             }
         }
     }

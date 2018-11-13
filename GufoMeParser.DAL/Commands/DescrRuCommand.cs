@@ -21,7 +21,7 @@ namespace GufoMeParser.DAL.Commands
             {
                 new MySqlParameter { ParameterName = "@Wordfrom", Value = word },
                 new MySqlParameter { ParameterName = "@Descript", Value = parsedTxt },
-                new MySqlParameter { ParameterName = "@Descript2", Value = parsedHtml },
+                new MySqlParameter { ParameterName = "@Descript2", Value = parsedHtml }
             };
 
             try
