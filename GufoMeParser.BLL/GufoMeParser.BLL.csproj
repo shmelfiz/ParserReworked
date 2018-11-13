@@ -1,0 +1,76 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
+  <PropertyGroup>
+    <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
+    <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
+    <ProjectGuid>{319C04EA-20CE-43E3-A1B0-F1D16B885A03}</ProjectGuid>
+    <OutputType>Library</OutputType>
+    <AppDesignerFolder>Properties</AppDesignerFolder>
+    <RootNamespace>GufoMeParser.BLL</RootNamespace>
+    <AssemblyName>GufoMeParser.BLL</AssemblyName>
+    <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
+    <FileAlignment>512</FileAlignment>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
+    <DebugSymbols>true</DebugSymbols>
+    <DebugType>full</DebugType>
+    <Optimize>false</Optimize>
+    <OutputPath>bin\Debug\</OutputPath>
+    <DefineConstants>DEBUG;TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
+    <DebugType>pdbonly</DebugType>
+    <Optimize>true</Optimize>
+    <OutputPath>bin\Release\</OutputPath>
+    <DefineConstants>TRACE</DefineConstants>
+    <ErrorReport>prompt</ErrorReport>
+    <WarningLevel>4</WarningLevel>
+  </PropertyGroup>
+  <ItemGroup>
+    <Reference Include="HtmlAgilityPack, Version=1.8.2.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.8.2\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
+    <Reference Include="System" />
+    <Reference Include="System.Core" />
+    <Reference Include="System.Xml.Linq" />
+    <Reference Include="System.Data.DataSetExtensions" />
+    <Reference Include="Microsoft.CSharp" />
+    <Reference Include="System.Data" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Xml" />
+  </ItemGroup>
+  <ItemGroup>
+    <Compile Include="Managers\EnAcademicVocabularyManager.cs" />
+    <Compile Include="Managers\Interfaces\IEnAcademicVocabularyManager.cs" />
+    <Compile Include="Managers\Interfaces\IManager.cs" />
+    <Compile Include="Managers\Interfaces\IGufoVocabularyManager.cs" />
+    <Compile Include="Managers\GufoVocabularyManager.cs" />
+    <Compile Include="Parsers\EnAcademic\Classes\EnAcademicParser.cs" />
+    <Compile Include="ParsersFactory\Factory\ParserCreator.cs" />
+    <Compile Include="Parsers\GufoMe\Classes\GufoParser.cs" />
+    <Compile Include="Parsers\Interfaces\IParser.cs" />
+    <Compile Include="ParsersFactory\Interfaces\IParserCreator.cs" />
+    <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GufoMeParser.BLL.Infrastructure\GufoMeParser.BLL.Infrastructure.csproj">
+      <Project>{CE3ECFFA-27E9-463A-80BB-C6AEF818AE12}</Project>
+      <Name>GufoMeParser.BLL.Infrastructure</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GufoMeParser.Core\GufoMeParser.Core.csproj">
+      <Project>{8f627d8a-5c52-4c9b-985f-a4982a849333}</Project>
+      <Name>GufoMeParser.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GufoMeParser.DAL\GufoMeParser.DAL.csproj">
+      <Project>{D08ED5C3-3B68-40A4-B059-D7BCF4F4B96A}</Project>
+      <Name>GufoMeParser.DAL</Name>
+    </ProjectReference>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
+  </ItemGroup>
+  <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+</Project>

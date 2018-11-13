@@ -1,0 +1,8 @@
+version: '2.1'
+
+services:
+  gufomeparser:
+    image: gufomeparser
+    build:
+      context: .\GufoMeParser
+      dockerfile: Dockerfile

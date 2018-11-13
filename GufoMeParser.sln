@@ -1,0 +1,49 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.26430.16
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GufoMeParser", "GufoMeParser\GufoMeParser.csproj", "{82530667-1A3F-45E8-B72A-7BE40654E3FD}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GufoMeParser.DAL", "GufoMeParser.DAL\GufoMeParser.DAL.csproj", "{D08ED5C3-3B68-40A4-B059-D7BCF4F4B96A}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GufoMeParser.BLL", "GufoMeParser.BLL\GufoMeParser.BLL.csproj", "{319C04EA-20CE-43E3-A1B0-F1D16B885A03}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GufoMeParser.BLL.Infrastructure", "GufoMeParser.BLL.Infrastructure\GufoMeParser.BLL.Infrastructure.csproj", "{CE3ECFFA-27E9-463A-80BB-C6AEF818AE12}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "GufoMeParser.Core", "GufoMeParser.Core\GufoMeParser.Core.csproj", "{8F627D8A-5C52-4C9B-985F-A4982A849333}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{82530667-1A3F-45E8-B72A-7BE40654E3FD}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{82530667-1A3F-45E8-B72A-7BE40654E3FD}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{82530667-1A3F-45E8-B72A-7BE40654E3FD}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{82530667-1A3F-45E8-B72A-7BE40654E3FD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D08ED5C3-3B68-40A4-B059-D7BCF4F4B96A}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D08ED5C3-3B68-40A4-B059-D7BCF4F4B96A}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D08ED5C3-3B68-40A4-B059-D7BCF4F4B96A}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D08ED5C3-3B68-40A4-B059-D7BCF4F4B96A}.Release|Any CPU.Build.0 = Release|Any CPU
+		{319C04EA-20CE-43E3-A1B0-F1D16B885A03}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{319C04EA-20CE-43E3-A1B0-F1D16B885A03}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{319C04EA-20CE-43E3-A1B0-F1D16B885A03}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{319C04EA-20CE-43E3-A1B0-F1D16B885A03}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CE3ECFFA-27E9-463A-80BB-C6AEF818AE12}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CE3ECFFA-27E9-463A-80BB-C6AEF818AE12}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CE3ECFFA-27E9-463A-80BB-C6AEF818AE12}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CE3ECFFA-27E9-463A-80BB-C6AEF818AE12}.Release|Any CPU.Build.0 = Release|Any CPU
+		{8F627D8A-5C52-4C9B-985F-A4982A849333}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{8F627D8A-5C52-4C9B-985F-A4982A849333}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{8F627D8A-5C52-4C9B-985F-A4982A849333}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{8F627D8A-5C52-4C9B-985F-A4982A849333}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {C3E674D6-EED2-40C5-9FF8-31C8CB64D1F6}
+	EndGlobalSection
+EndGlobal
