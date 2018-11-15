@@ -60,6 +60,7 @@
     <Compile Include="Managers\Interfaces\IManager.cs" />
     <Compile Include="Managers\Interfaces\IGufoVocabularyManager.cs" />
     <Compile Include="Managers\GufoVocabularyManager.cs" />
+    <Compile Include="Parsers\DeWiktionary\Classes\DeWiktionaryParser.cs" />
     <Compile Include="Parsers\EnAcademic\Classes\EnAcademicParser.cs" />
     <Compile Include="ParsersFactory\Factory\ParserCreator.cs" />
     <Compile Include="Parsers\GufoMe\Classes\GufoParser.cs" />

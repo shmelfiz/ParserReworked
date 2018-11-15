@@ -3,6 +3,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 using GufoMeParser.Core.Enum;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace GufoMeParser.Core.Helpers
 {
@@ -11,6 +13,25 @@ namespace GufoMeParser.Core.Helpers
         private static string _parsedTxtPath = Directory.GetCurrentDirectory() + "\\SavedFiles";
         private static string _parsedHtmlPath = Directory.GetCurrentDirectory() + "\\SavedFilesHtml";
         private static string _parsedLinkPath = Directory.GetCurrentDirectory() + "\\LinksFile";
+
+        public static List<string> GetAllTextLinesFromFile(string filePath)
+        {
+            if(string.IsNullOrEmpty(filePath))
+            {
+                return new List<string>();
+            }
+
+            try
+            {
+                var fileTextLines = File.ReadAllLines(filePath).ToList();
+
+                return fileTextLines ?? new List<string>();
+            }
+            catch
+            {
+                return new List<string>();
+            }
+        }
 
         public static Task Save(string text, string name, ParsedDataType fileType)
         {
