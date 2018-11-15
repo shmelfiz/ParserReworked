@@ -14,7 +14,7 @@ namespace GufoMeParser.BLL.Parsers.GufoMe.Classes
 
         public GufoParser()
         {
-            _vocabularyManager = Container.Resolve<IGufoVocabularyManager>();
+            Container.InjectDependencies(this);
         }
 
         public string GetParsedTxt(string url)
@@ -56,15 +56,11 @@ namespace GufoMeParser.BLL.Parsers.GufoMe.Classes
         {
             try
             {
-                var parsedNameDirty = GetWebPage(url)
+                var parsedName = GetWebPage(url)
                      .DocumentNode.SelectNodes("//h1")
                      .Select(x => x.InnerText).FirstOrDefault();
 
-                var parsedName = new StringBuilder();
-                parsedName.Append(parsedNameDirty);
-
-
-                return parsedName.ToString();
+                return parsedName;
             }
             catch
             {

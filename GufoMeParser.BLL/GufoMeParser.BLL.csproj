@@ -30,11 +30,20 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Core.4.2.0\lib\net45\Castle.Core.dll</HintPath>
+    </Reference>
+    <Reference Include="Castle.Windsor, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
+      <HintPath>..\packages\Castle.Windsor.4.1.0\lib\net45\Castle.Windsor.dll</HintPath>
+    </Reference>
     <Reference Include="HtmlAgilityPack, Version=1.8.2.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
       <HintPath>..\packages\HtmlAgilityPack.1.8.2\lib\Net45\HtmlAgilityPack.dll</HintPath>
     </Reference>
     <Reference Include="System" />
+    <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
     <Reference Include="Microsoft.CSharp" />
@@ -43,7 +52,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="IoCInstaller\IoCInstaller.cs" />
+    <Compile Include="Managers\DeWiktionaryVocabularyManager.cs" />
     <Compile Include="Managers\EnAcademicVocabularyManager.cs" />
+    <Compile Include="Managers\Interfaces\IDeWiktionaryVocabularyManager.cs" />
     <Compile Include="Managers\Interfaces\IEnAcademicVocabularyManager.cs" />
     <Compile Include="Managers\Interfaces\IManager.cs" />
     <Compile Include="Managers\Interfaces\IGufoVocabularyManager.cs" />
@@ -56,10 +68,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GufoMeParser.BLL.Infrastructure\GufoMeParser.BLL.Infrastructure.csproj">
-      <Project>{CE3ECFFA-27E9-463A-80BB-C6AEF818AE12}</Project>
-      <Name>GufoMeParser.BLL.Infrastructure</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GufoMeParser.Core\GufoMeParser.Core.csproj">
       <Project>{8f627d8a-5c52-4c9b-985f-a4982a849333}</Project>
       <Name>GufoMeParser.Core</Name>
@@ -67,6 +75,10 @@
     <ProjectReference Include="..\GufoMeParser.DAL\GufoMeParser.DAL.csproj">
       <Project>{D08ED5C3-3B68-40A4-B059-D7BCF4F4B96A}</Project>
       <Name>GufoMeParser.DAL</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GufoMeParser.Infrastructure\GufoMeParser.Infrastructure.csproj">
+      <Project>{AFDD5034-C0CE-42E5-9F0C-2092FFAD8274}</Project>
+      <Name>GufoMeParser.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

@@ -73,11 +73,5 @@
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\GufoMeParser.BLL.Infrastructure\GufoMeParser.BLL.Infrastructure.csproj">
-      <Project>{CE3ECFFA-27E9-463A-80BB-C6AEF818AE12}</Project>
-      <Name>GufoMeParser.BLL.Infrastructure</Name>
-    </ProjectReference>
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

@@ -31,8 +31,7 @@ namespace GufoMeParser
         }
         private static void InitializeIoC()
         {
-            _parserCreator = Container.Resolve<IParserCreator>();
-            _vocabularyManager = Container.Resolve<IGufoVocabularyManager>();
+            Container.Initialize();
         }
          
         private static void InitializeParser(out IParser parser, out string mainUrl)

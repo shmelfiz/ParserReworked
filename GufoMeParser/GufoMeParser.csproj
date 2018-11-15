@@ -117,10 +117,6 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
-    <ProjectReference Include="..\GufoMeParser.BLL.Infrastructure\GufoMeParser.BLL.Infrastructure.csproj">
-      <Project>{CE3ECFFA-27E9-463A-80BB-C6AEF818AE12}</Project>
-      <Name>GufoMeParser.BLL.Infrastructure</Name>
-    </ProjectReference>
     <ProjectReference Include="..\GufoMeParser.BLL\GufoMeParser.BLL.csproj">
       <Project>{319C04EA-20CE-43E3-A1B0-F1D16B885A03}</Project>
       <Name>GufoMeParser.BLL</Name>
@@ -128,6 +124,10 @@
     <ProjectReference Include="..\GufoMeParser.Core\GufoMeParser.Core.csproj">
       <Project>{8F627D8A-5C52-4C9B-985F-A4982A849333}</Project>
       <Name>GufoMeParser.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GufoMeParser.Infrastructure\GufoMeParser.Infrastructure.csproj">
+      <Project>{AFDD5034-C0CE-42E5-9F0C-2092FFAD8274}</Project>
+      <Name>GufoMeParser.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>

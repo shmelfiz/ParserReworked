@@ -14,7 +14,7 @@ namespace GufoMeParser.Parsers.BLL.EnAcademic.Classes
 
         public EnAcademicParser()
         {
-            _vocabularyManager = Container.Resolve<IEnAcademicVocabularyManager>();
+            Container.InjectDependencies(this);
         }
 
         public string GetParsedTxt(string url)
@@ -57,12 +57,10 @@ namespace GufoMeParser.Parsers.BLL.EnAcademic.Classes
         {
             try
             {
-                var parsedNameDirty = GetWebPage(url).DocumentNode.SelectNodes("//dt").Select(x => x.InnerText).FirstOrDefault();
+                var parsedName = GetWebPage(url).DocumentNode
+                    .SelectNodes("//dt").Select(x => x.InnerText).FirstOrDefault();
 
-                var parsedName = new StringBuilder();
-                parsedName.Append(parsedNameDirty);
-
-                return parsedName.ToString();
+                return parsedName;
             }
             catch
             {
