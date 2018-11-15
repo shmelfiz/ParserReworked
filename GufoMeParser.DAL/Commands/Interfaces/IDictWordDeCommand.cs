@@ -1,6 +1,6 @@
 ﻿namespace GufoMeParser.DAL.Commands.Interfaces
 {
-    public interface ICommand
+    public interface IDictWordDeCommand : ICommand
     {
     }
 }

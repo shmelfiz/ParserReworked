@@ -3,10 +3,12 @@
     public interface IParser
     {
 
-        string GetParsedTxt(string url);
+        string ParsedPageName { get; set; }
+        string ParsedText { get; set; }
+        string ParsedHtml { get; set; }
+
+        void ParseData(string url);
         string GetNextUrl(string currentUrl);
-        string GetPageName(string url);
-        string GetParsedHtml(string url);
-        void SendDataToDb(string currentWord, string parsedTxt, string parsedHtm);
+        void SendDataToDb();
     }
 }

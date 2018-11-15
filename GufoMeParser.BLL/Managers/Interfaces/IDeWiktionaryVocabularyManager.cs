@@ -1,7 +1,12 @@
-﻿namespace GufoMeParser.BLL.Managers.Interfaces
+﻿using GufoMeParser.Core.BuisinessModels;
+using GufoMeParser.Core.ModelsDTO;
+using System.Collections.Generic;
+
+namespace GufoMeParser.BLL.Managers.Interfaces
 {
     public interface IDeWiktionaryVocabularyManager : IManager
     {
-        void SendData(string word, string parsedTxt, string parsedHtml);
+        List<DeWiktionaryDataModel> SendData(DeWiktionaryDataModelDTO dataModel);
+        string GetWordForRequest();
     }
 }

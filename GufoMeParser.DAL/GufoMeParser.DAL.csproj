@@ -63,7 +63,11 @@
   <ItemGroup>
     <Compile Include="Commands\DescrEnCommand.cs" />
     <Compile Include="Commands\DescrRuCommand.cs" />
+    <Compile Include="Commands\DictWordDeCommand.cs" />
     <Compile Include="Commands\Interfaces\ICommand.cs" />
+    <Compile Include="Commands\Interfaces\IDescrEnCommand.cs" />
+    <Compile Include="Commands\Interfaces\IDescrRuCommand.cs" />
+    <Compile Include="Commands\Interfaces\IDictWordDeCommand.cs" />
     <Compile Include="Context\MySQLContext.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Repository\Interfaces\IRepository.cs" />
@@ -72,6 +76,12 @@
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\GufoMeParser.Core\GufoMeParser.Core.csproj">
+      <Project>{8F627D8A-5C52-4C9B-985F-A4982A849333}</Project>
+      <Name>GufoMeParser.Core</Name>
+    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

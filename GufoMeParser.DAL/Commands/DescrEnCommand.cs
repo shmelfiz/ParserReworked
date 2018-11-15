@@ -1,18 +1,17 @@
 ﻿using System;
-using GufoMeParser.BLL.Infrastructure;
 using MySql.Data.MySqlClient;
 using GufoMeParser.DAL.Commands.Interfaces;
 using GufoMeParser.DAL.Repository.Interfaces;
 
 namespace GufoMeParser.DAL.Commands
 {
-    public class DescrEnCommand : ICommand
+    public class DescrEnCommand : IDescrEnCommand
     {
         private IRepository _repository { get; set; }
 
-        public DescrEnCommand()
+        public DescrEnCommand(IRepository repository)
         {
-            _repository = Container.Resolve<IRepository>();
+            _repository = repository;
         }
 
         public async void SendDataAsync(string word, string parsedTxt, string parsedHtml)
@@ -29,9 +28,9 @@ namespace GufoMeParser.DAL.Commands
                 await _repository.DbContext.Database
                     .ExecuteSqlCommandAsync("call DictWordEn(@Wordfrom, @Descript, @Descript2)", parameters);
             }
-            catch
+            catch(Exception e)
             {
-                throw new Exception("Проблема записи в БД!");
+                throw new Exception(e.ToString());
             }
         }
     }

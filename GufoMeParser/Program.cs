@@ -12,6 +12,7 @@ using GufoMeParser.Core;
 using GufoMeParser.Core.Enum;
 using GufoMeParser.Core.Helpers;
 using GufoMeParser.Helpers;
+using GufoMeParser.Infrastructure;
 using GufoMeParser.Parsers.BLL.EnAcademic.Classes;
 
 namespace GufoMeParser
@@ -23,15 +24,16 @@ namespace GufoMeParser
 
         static void Main(string[] args)
         {
-            InitializeIoC();
+            InitializeDependencies();
 
             InitializeParser(out IParser parser, out string mainUrl);
 
             RunParser(parser, mainUrl);
         }
-        private static void InitializeIoC()
+        private static void InitializeDependencies()
         {
             Container.Initialize();
+            MapperInitializer.Initialize();
         }
          
         private static void InitializeParser(out IParser parser, out string mainUrl)
@@ -55,38 +57,33 @@ namespace GufoMeParser
                     {
                         parser = _parserCreator.GetParser<GufoParser>();
                         mainUrl = Defaults.GuFoMainUrl;
-                        return;
+                        break;
                     }
                 case ParserName.enacademic:
                     {
                         parser = _parserCreator.GetParser<EnAcademicParser>();
                         mainUrl = Defaults.EnAcademcMainUrl;
-                        return;
+                        break;
                     }
             }           
         }
 
-        private static void RunParser(IParser parser, string mainUrl)
+        private static async void RunParser(IParser parser, string mainUrl)
         {
             var parsing = true;
-            var wordsCount = 0L;
             var urls = new List<string> { mainUrl };
 
             ConsoleWindowHelper.CheckWroteByUserLink(parser, urls);
-
             Console.WriteLine("Processing!");
 
             while (parsing)
             {
-                wordsCount++;
-                var currentWord = parser.GetPageName(urls.LastOrDefault());
-                var parsedTxt = parser.GetParsedTxt(urls.LastOrDefault());
-                var parsedHtml = parser.GetParsedHtml(urls.LastOrDefault());
+                parser.ParseData(urls.FirstOrDefault());
 
-                FileHelper.Save(parsedTxt, currentWord, ParsedDataType.ParsedTxt).Wait();
-                FileHelper.Save(parsedHtml, currentWord, ParsedDataType.ParsedHtml).Wait();
+                await FileHelper.Save(parser.ParsedText, parser.ParsedPageName, ParsedDataType.ParsedTxt);
+                await FileHelper.Save(parser.ParsedHtml, parser.ParsedPageName, ParsedDataType.ParsedHtml);
 
-                parser.SendDataToDb(currentWord, parsedTxt, parsedHtml);
+                parser.SendDataToDb();
 
                 var nextUrl = parser.GetNextUrl(urls.LastOrDefault());
                 FileHelper.Save(nextUrl, "Links", ParsedDataType.ParsedLink).Wait();
@@ -98,7 +95,7 @@ namespace GufoMeParser
 
                 urls.Add(nextUrl);
 
-                Console.WriteLine(currentWord);
+                Console.WriteLine($"Current word is: \"{parser.ParsedPageName}\".");
                 Console.CancelKeyPress += Cancel;
 
                 Thread.Sleep(1000);

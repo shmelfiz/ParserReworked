@@ -1,6 +1,7 @@
 ﻿using GufoMeParser.BLL.Infrastructure;
 using GufoMeParser.BLL.Managers.Interfaces;
 using GufoMeParser.BLL.Parsers.Interfaces;
+using GufoMeParser.Core;
 using HtmlAgilityPack;
 using System;
 using System.Linq;
@@ -12,30 +13,38 @@ namespace GufoMeParser.BLL.Parsers.GufoMe.Classes
     {
         private IGufoVocabularyManager _vocabularyManager { get; set; }
 
+        public string ParsedPageName { get; set; } = string.Empty;
+        public string ParsedText { get; set; } = string.Empty;
+        public string ParsedHtml { get; set; } = string.Empty;
+
         public GufoParser()
         {
             Container.InjectDependencies(this);
         }
 
-        public string GetParsedTxt(string url)
+        public void ParseData(string url)
         {
-            var parsedTxtDirty = GetWebPage(url)
-                .DocumentNode.SelectNodes("//p")
-                .Select(x => x.InnerText);
-            
-            var parsedText = new StringBuilder();
-
-            foreach (var row in parsedTxtDirty)
+            if (string.IsNullOrEmpty(url))
             {
-                parsedText.AppendLine(row);
+                return;
             }
 
-            return parsedText.ToString().Replace("&copy; 2018 Gufo.me","");
+            try
+            {
+                ParsedPageName = GetPageName(url);
+                ParsedText = GetParsedTxt(url);
+                ParsedHtml = GetParsedHtml(url);
+            }
+            catch
+            {
+                Console.WriteLine($"Error while parsing {url}!");
+                return;
+            }
         }
 
         public string GetNextUrl(string currentUrl)
         {
-            if(currentUrl.Contains("%D1%8F%D1%89%D1%83%D1%80"))
+            if(currentUrl.Contains(Defaults.GuFoFinalWordCode))
             {
                 return "Complete!";  //костылец
             }
@@ -52,7 +61,45 @@ namespace GufoMeParser.BLL.Parsers.GufoMe.Classes
             return parsedUrl.ToString();
         }
 
-        public string GetPageName(string url)
+        public void SendDataToDb()
+        {
+            if(string.IsNullOrEmpty(ParsedPageName) | string.IsNullOrEmpty(ParsedText) | string.IsNullOrEmpty(ParsedHtml))
+            {
+                return;
+            }
+
+            try
+            {
+                _vocabularyManager.SendData(ParsedPageName, ParsedText, ParsedHtml);
+            }
+            catch (Exception e)
+            {
+                Console.WriteLine($"Error while sending data to db. Error: {e}.");
+                return;
+            }
+        }
+
+        #region Parse processings
+
+        private string GetParsedHtml(string url)
+        {
+            var web = new HtmlWeb();
+            var page = web.Load(url);
+            var parsedHtml = new StringBuilder();
+
+            var parsedHtmlSplitted = page.DocumentNode
+                .SelectNodes("//p")
+                .Select(x => x.OuterHtml);
+
+            foreach (string parsedNode in parsedHtmlSplitted)
+            {
+                parsedHtml.Append(parsedNode);
+            }
+
+            return parsedHtml.ToString(); ;
+        }
+
+        private string GetPageName(string url)
         {
             try
             {
@@ -68,22 +115,20 @@ namespace GufoMeParser.BLL.Parsers.GufoMe.Classes
             }
         }
 
-        public string GetParsedHtml(string url)
+        private string GetParsedTxt(string url)
         {
-            var web = new HtmlWeb();
-            var page = web.Load(url);
-            var parsedHtml = new StringBuilder();
+            var parsedTxtDirty = GetWebPage(url)
+                .DocumentNode.SelectNodes("//p")
+                .Select(x => x.InnerText);
 
-            var parsedHtmlSplitted = page.DocumentNode
-                .SelectNodes("//p")
-                .Select(x => x.OuterHtml);
+            var parsedText = new StringBuilder();
 
-            foreach(string parsedNode in parsedHtmlSplitted)
+            foreach (var row in parsedTxtDirty)
             {
-                parsedHtml.Append(parsedNode);
+                parsedText.AppendLine(row);
             }
 
-            return parsedHtml.ToString(); ;
+            return parsedText.ToString().Replace("&copy; 2018 Gufo.me", "");
         }
 
         private HtmlDocument GetWebPage(string url)
@@ -94,21 +139,6 @@ namespace GufoMeParser.BLL.Parsers.GufoMe.Classes
             return page;
         }
 
-        public void SendDataToDb(string currentWord, string parsedTxt, string parsedHtml)
-        {
-            if(string.IsNullOrEmpty(currentWord) | string.IsNullOrEmpty(parsedTxt) | string.IsNullOrEmpty(parsedHtml))
-            {
-                return;
-            }
-
-            try
-            {
-                _vocabularyManager.SendData(currentWord, parsedTxt, parsedHtml);
-            }
-            catch
-            {
-                return;
-            }
-        }
+        #endregion
     }
 }

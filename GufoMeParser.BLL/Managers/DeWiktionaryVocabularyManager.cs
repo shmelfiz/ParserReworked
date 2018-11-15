@@ -1,15 +1,19 @@
 ﻿using GufoMeParser.BLL.Managers.Interfaces;
+using GufoMeParser.Core.BuisinessModels;
+using GufoMeParser.Core.ModelsDTO;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GufoMeParser.BLL.Managers
 {
     public class DeWiktionaryVocabularyManager : IDeWiktionaryVocabularyManager
     {
-        public void SendData(string word, string parsedTxt, string parsedHtml)
+        public List<DeWiktionaryDataModel> SendData(DeWiktionaryDataModelDTO dataModel)
+        {
+            throw new NotImplementedException();
+        }
+
+        public string GetWordForRequest()
         {
             throw new NotImplementedException();
         }

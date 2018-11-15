@@ -20,18 +20,49 @@ namespace GufoMeParser.BLL.Parsers.DeWiktionary.Classes
         private List<string> _deWords { get; set; }
         private int _wordPosition { get; set; } = 0;
 
+        public string ParsedPageName { get; set; }
+        public string ParsedText { get; set; }
+        public string ParsedHtml { get; set; }
+
         public DeWiktionaryParser()
         {
             Container.InjectDependencies(this);
             _deWords = FileHelper.GetAllTextLinesFromFile(wordsFilePath);
         }
 
-        public string GetNextUrl(string currentUrl = null)
+        public void ParseData(string url)
+        {
+            if (string.IsNullOrEmpty(url))
+            {
+                return;
+            }
+
+            try
+            {
+                ParsedPageName = GetPageName(url);
+                ParsedText = GetParsedTxt(url);
+                ParsedHtml = GetParsedHtml(url);
+            }
+            catch
+            {
+                Console.WriteLine($"Error while parsing {url}!");
+                return;
+            }
+        }
+
+        public string GetNextUrl(string url)
         {
             //var  = 
 
             throw new NotImplementedException();
         }
+
+        public void SendDataToDb()
+        {
+            throw new NotImplementedException();
+        }
+
+        #region Parse processing
 
         public string GetPageName(string url)
         {
@@ -48,9 +79,6 @@ namespace GufoMeParser.BLL.Parsers.DeWiktionary.Classes
             throw new NotImplementedException();
         }
 
-        public void SendDataToDb(string currentWord, string parsedTxt, string parsedHtm)
-        {
-            throw new NotImplementedException();
-        }
+        #endregion
     }
 }

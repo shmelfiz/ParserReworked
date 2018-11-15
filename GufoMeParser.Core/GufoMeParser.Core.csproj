@@ -40,11 +40,13 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="BuisinessModels\DeWiktionaryDataModel.cs" />
     <Compile Include="Defaults.cs" />
     <Compile Include="Enum\ParsedDataType.cs" />
     <Compile Include="Enum\ParserName.cs" />
     <Compile Include="Helpers\DirectoryHelper.cs" />
     <Compile Include="Helpers\FileHelper.cs" />
+    <Compile Include="ModelsDTO\DeWiktionaryDataModelDTO.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup />
