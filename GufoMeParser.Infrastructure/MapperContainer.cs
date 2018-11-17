@@ -1,17 +1,18 @@
 ﻿using AutoMapper;
 using GufoMeParser.Core.BuisinessModels;
 using GufoMeParser.Core.ModelsDTO;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace GufoMeParser.Infrastructure
 {
-    public static class MapperInitializer
+    public static class MapperContainer
     {
-        public static IMapper MapperInstance { get; private set; }
+        public static IMapper MapperInstance
+        {
+            get
+            {
+                return Mapper.Instance;
+            }
+        }
 
         public static void Initialize()
         {

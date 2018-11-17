@@ -1,4 +1,4 @@
-﻿using GufoMeParser.BLL.Parsers.Interfaces;
+﻿using GufoMeParser.BLL.Parsers.Parsers.Interfaces;
 
 namespace GufoMeParser.BLL.ParsersFactory.Interfaces
 {

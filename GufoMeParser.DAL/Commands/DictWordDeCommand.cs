@@ -39,9 +39,10 @@ namespace GufoMeParser.DAL.Commands
 
                 return response;
             }
-            catch
+            catch(Exception e)
             {
-                throw new Exception("Проблема записи в БД!");
+                Console.WriteLine($"При вызове \"DictWordDeCommand\" произошла ошибка: {e}");
+                return new List<DeWiktionaryDataModelDTO>();
             }
         }
     }

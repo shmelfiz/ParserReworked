@@ -117,6 +117,10 @@
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GufoMeParser.BLL.Parsers\GufoMeParser.BLL.Parsers.csproj">
+      <Project>{E1E0831D-B453-4A5D-8814-ACF7B936C4A7}</Project>
+      <Name>GufoMeParser.BLL.Parsers</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GufoMeParser.BLL\GufoMeParser.BLL.csproj">
       <Project>{319C04EA-20CE-43E3-A1B0-F1D16B885A03}</Project>
       <Name>GufoMeParser.BLL</Name>

@@ -1,23 +1,23 @@
 ﻿using GufoMeParser.BLL.Infrastructure;
 using GufoMeParser.BLL.Managers.Interfaces;
-using GufoMeParser.BLL.Parsers.Interfaces;
+using GufoMeParser.BLL.Parsers.Parsers.Interfaces;
 using GufoMeParser.Core;
 using HtmlAgilityPack;
 using System;
 using System.Linq;
 using System.Text;
 
-namespace GufoMeParser.BLL.Parsers.GufoMe.Classes
+namespace GufoMeParser.Parsers.BLL.Parsers.EnAcademic.Classes
 {
-    public class GufoParser : IParser
+    public class EnAcademicParser : IParser
     {
-        private IGufoVocabularyManager _vocabularyManager { get; set; }
+        private IEnAcademicVocabularyManager _vocabularyManager { get; set; }
 
-        public string ParsedPageName { get; set; } = string.Empty;
-        public string ParsedText { get; set; } = string.Empty;
-        public string ParsedHtml { get; set; } = string.Empty;
+        public string ParsedPageName { get; private set; }
+        public string ParsedText { get; private set; }
+        public string ParsedHtml { get; private set; }
 
-        public GufoParser()
+        public EnAcademicParser()
         {
             Container.InjectDependencies(this);
         }
@@ -44,18 +44,17 @@ namespace GufoMeParser.BLL.Parsers.GufoMe.Classes
 
         public string GetNextUrl(string currentUrl)
         {
-            if(currentUrl.Contains(Defaults.GuFoFinalWordCode))
+            if (currentUrl.Contains(Defaults.EnAcademicLastWordCode))
             {
                 return "Complete!";  //костылец
             }
 
             var parsedUrlDirty = GetWebPage(currentUrl)
-                .DocumentNode.SelectNodes("//i[@class='fa fa-long-arrow-right']//preceding-sibling::a")
+                .DocumentNode.SelectNodes("//li[@class='next']/a")
                 .Select(x => x.Attributes.FirstOrDefault()).FirstOrDefault();
 
             var parsedUrl = new StringBuilder();
             parsedUrl.Append("\n");
-            parsedUrl.Append("https://gufo.me");
             parsedUrl.Append(parsedUrlDirty.Value);
 
             return parsedUrl.ToString();
@@ -63,7 +62,7 @@ namespace GufoMeParser.BLL.Parsers.GufoMe.Classes
 
         public void SendDataToDb()
         {
-            if(string.IsNullOrEmpty(ParsedPageName) | string.IsNullOrEmpty(ParsedText) | string.IsNullOrEmpty(ParsedHtml))
+            if (string.IsNullOrEmpty(ParsedPageName) | string.IsNullOrEmpty(ParsedText) | string.IsNullOrEmpty(ParsedHtml))
             {
                 return;
             }
@@ -72,7 +71,7 @@ namespace GufoMeParser.BLL.Parsers.GufoMe.Classes
             {
                 _vocabularyManager.SendData(ParsedPageName, ParsedText, ParsedHtml);
             }
-            catch (Exception e)
+            catch(Exception e)
             {
                 Console.WriteLine($"Error while sending data to db. Error: {e}.");
                 return;
@@ -81,44 +80,12 @@ namespace GufoMeParser.BLL.Parsers.GufoMe.Classes
 
         #region Parse processings
 
-        private string GetParsedHtml(string url)
-        {
-            var web = new HtmlWeb();
-            var page = web.Load(url);
-            var parsedHtml = new StringBuilder();
-
-            var parsedHtmlSplitted = page.DocumentNode
-                .SelectNodes("//p")
-                .Select(x => x.OuterHtml);
-
-            foreach (string parsedNode in parsedHtmlSplitted)
-            {
-                parsedHtml.Append(parsedNode);
-            }
-
-            return parsedHtml.ToString(); ;
-        }
-
-        private string GetPageName(string url)
-        {
-            try
-            {
-                var parsedName = GetWebPage(url)
-                     .DocumentNode.SelectNodes("//h1")
-                     .Select(x => x.InnerText).FirstOrDefault();
-
-                return parsedName;
-            }
-            catch
-            {
-                throw new Exception("This ip was banned! Wait for 10 minutes and try again from last link in \"Links.txt\".");
-            }
-        }
-
         private string GetParsedTxt(string url)
         {
             var parsedTxtDirty = GetWebPage(url)
-                .DocumentNode.SelectNodes("//p")
+                //.DocumentNode.SelectNodes("//meta[@name='Description']")
+                .DocumentNode.SelectNodes("//dd")
+                //.Select(x => x.GetAttributeValue("Content", "false"));
                 .Select(x => x.InnerText);
 
             var parsedText = new StringBuilder();
@@ -128,7 +95,40 @@ namespace GufoMeParser.BLL.Parsers.GufoMe.Classes
                 parsedText.AppendLine(row);
             }
 
-            return parsedText.ToString().Replace("&copy; 2018 Gufo.me", "");
+            return parsedText.ToString();
+        }
+
+        private string GetPageName(string url)
+        {
+            try
+            {
+                var parsedName = GetWebPage(url).DocumentNode
+                    .SelectNodes("//dt").Select(x => x.InnerText).FirstOrDefault();
+
+                return parsedName;
+            }
+            catch
+            {
+                Console.WriteLine("This ip was banned! Wait for 10 minutes and try again from last link in \"Links.txt\".");
+                return string.Empty;
+            }
+        }
+
+        private string GetParsedHtml(string url)
+        {
+            var page = GetWebPage(url);
+            var parsedHtml = new StringBuilder();
+
+            var parsedHtmlSplitted = page.DocumentNode
+                .SelectNodes("//dd")
+                .Select(x => x.OuterHtml);
+
+            foreach (string parsedNode in parsedHtmlSplitted)
+            {
+                parsedHtml.Append(parsedNode);
+            }
+
+            return parsedHtml.ToString(); ;
         }
 
         private HtmlDocument GetWebPage(string url)

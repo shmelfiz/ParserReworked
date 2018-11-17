@@ -4,13 +4,14 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{AFDD5034-C0CE-42E5-9F0C-2092FFAD8274}</ProjectGuid>
+    <ProjectGuid>{E1E0831D-B453-4A5D-8814-ACF7B936C4A7}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>GufoMeParser.Infrastructure</RootNamespace>
-    <AssemblyName>GufoMeParser.Infrastructure</AssemblyName>
+    <RootNamespace>GufoMeParser.BLL.Parsers</RootNamespace>
+    <AssemblyName>GufoMeParser.BLL.Parsers</AssemblyName>
     <TargetFrameworkVersion>v4.6.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
+    <Deterministic>true</Deterministic>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -30,23 +31,19 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
-      <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
-    </Reference>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.4.2.0\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
     <Reference Include="Castle.Windsor, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Windsor.4.1.0\lib\net45\Castle.Windsor.dll</HintPath>
     </Reference>
+    <Reference Include="HtmlAgilityPack, Version=1.8.2.0, Culture=neutral, PublicKeyToken=bd319b19eaf3b43a, processorArchitecture=MSIL">
+      <HintPath>..\packages\HtmlAgilityPack.1.8.2\lib\Net45\HtmlAgilityPack.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Remoting" />
-    <Reference Include="System.Runtime.Serialization" />
-    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
-      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
-    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -56,17 +53,34 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Container.cs" />
-    <Compile Include="MapperContainer.cs" />
+    <Compile Include="Handlers\DeWiktionary\DeWiktionaryHandler.cs" />
+    <Compile Include="Handlers\Interfaces\IDeWiktionaryHandler.cs" />
+    <Compile Include="Handlers\Interfaces\IHandler.cs" />
+    <Compile Include="Helpers\DeWiktionary\DeWiktionaryHelper.cs" />
+    <Compile Include="IoCInstaller\IoCInstaller.cs" />
+    <Compile Include="ParsersFactory\Factory\ParserCreator.cs" />
+    <Compile Include="ParsersFactory\Interfaces\IParserCreator.cs" />
+    <Compile Include="Parsers\DeWiktionary\Classes\DeWiktionaryParser.cs" />
+    <Compile Include="Parsers\EnAcademic\Classes\EnAcademicParser.cs" />
+    <Compile Include="Parsers\GufoMe\Classes\GufoParser.cs" />
+    <Compile Include="Parsers\Interfaces\IParser.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\GufoMeParser.BLL\GufoMeParser.BLL.csproj">
+      <Project>{319c04ea-20ce-43e3-a1b0-f1d16b885a03}</Project>
+      <Name>GufoMeParser.BLL</Name>
+    </ProjectReference>
     <ProjectReference Include="..\GufoMeParser.Core\GufoMeParser.Core.csproj">
       <Project>{8F627D8A-5C52-4C9B-985F-A4982A849333}</Project>
       <Name>GufoMeParser.Core</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\GufoMeParser.Infrastructure\GufoMeParser.Infrastructure.csproj">
+      <Project>{AFDD5034-C0CE-42E5-9F0C-2092FFAD8274}</Project>
+      <Name>GufoMeParser.Infrastructure</Name>
     </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />

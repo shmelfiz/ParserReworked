@@ -1,4 +1,4 @@
-﻿using GufoMeParser.BLL.Parsers.Interfaces;
+﻿using GufoMeParser.BLL.Parsers.Parsers.Interfaces;
 using GufoMeParser.Core;
 using GufoMeParser.Core.Enum;
 using System;
@@ -32,6 +32,11 @@ namespace GufoMeParser.Helpers
                 case ParserName.enacademic:
                     {
                         CheckWroteByUserLinkEnAcademic(urls);
+                        return;
+                    }
+                case ParserName.dewiktionary:
+                    {
+                        CheckWroteByUserLinkDeWiktionary(urls);
                         return;
                     }
             }
@@ -81,9 +86,40 @@ namespace GufoMeParser.Helpers
                     urls.RemoveAt(urls.IndexOf(urls.Last()));
                 }
 
-                if (urls.Count > 1 && !urls.Last().Contains(Defaults.GuFoStockUrl))
+                if (urls.Count > 1 && !urls.Last().Contains(Defaults.EnAcademcStockUrl))
                 {
                     Console.WriteLine(string.Format("The link must be like: {0}", Defaults.EnAcademcMainUrl));
+                    urls.RemoveAt(urls.IndexOf(urls.Last()));
+
+                    continue;
+                }
+
+                isRight = true;
+            }
+        }
+
+        private static void CheckWroteByUserLinkDeWiktionary(List<string> urls)
+        {
+            var isRight = false;
+
+            while (isRight == false)
+            {
+                Console.Write("Insert start url (example: https://de.wiktionary.org/wiki/Abt): ");
+                var readStartLink = Console.ReadLine();
+                urls.Add(readStartLink.Trim());
+
+                if (urls.Last().ToLower().Contains("continue"))
+                {
+                    Console.WriteLine(string.Format("Programm starting from start url: {0}", Defaults.DeWiktionaryMainUrl));
+                    urls.RemoveAt(urls.IndexOf(urls.Last()));
+                    isRight = true;
+
+                    continue;
+                }
+
+                if (urls.Count > 1 && !urls.Last().Contains(Defaults.DeWiktionaryStockUrl))
+                {
+                    Console.WriteLine(string.Format("The link must be like: {0}", Defaults.DeWiktionaryMainUrl));
                     urls.RemoveAt(urls.IndexOf(urls.Last()));
 
                     continue;

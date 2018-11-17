@@ -1,10 +1,11 @@
-﻿using GufoMeParser.BLL.Parsers.GufoMe.Classes;
-using GufoMeParser.BLL.Parsers.Interfaces;
+﻿using GufoMeParser.BLL.Parsers.Parsers.DeWiktionary.Classes;
+using GufoMeParser.BLL.Parsers.Parsers.GufoMe.Classes;
+using GufoMeParser.BLL.Parsers.Parsers.Interfaces;
 using GufoMeParser.BLL.ParsersFactory.Interfaces;
-using GufoMeParser.Parsers.BLL.EnAcademic.Classes;
+using GufoMeParser.Parsers.BLL.Parsers.EnAcademic.Classes;
 using System;
 
-namespace GufoMeParser.BLL.ParsersFactory.Factory
+namespace GufoMeParser.BLL.Parsers.ParsersFactory.Factory
 {
     public class ParserCreator : IParserCreator
     {
@@ -17,6 +18,10 @@ namespace GufoMeParser.BLL.ParsersFactory.Factory
             if(typeof(T) == typeof(EnAcademicParser))
             {
                 return new EnAcademicParser();
+            }
+            if (typeof(T) == typeof(DeWiktionaryParser))
+            {
+                return new DeWiktionaryParser();
             }
 
             throw new Exception("Name of type is incorrect!");

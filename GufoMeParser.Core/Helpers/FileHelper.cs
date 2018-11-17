@@ -44,7 +44,7 @@ namespace GufoMeParser.Core.Helpers
         {
             byte[] encodedText = Encoding.Unicode.GetBytes(text);
 
-            using (FileStream sourceStream = new FileStream(filePath,
+            using (var sourceStream = new FileStream(filePath,
                 FileMode.Append, FileAccess.Write, FileShare.None,
                 bufferSize: 4096, useAsync: true))
             {

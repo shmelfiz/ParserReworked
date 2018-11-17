@@ -30,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="AutoMapper, Version=7.0.1.0, Culture=neutral, PublicKeyToken=be96cd2c38ef1005, processorArchitecture=MSIL">
+      <HintPath>..\packages\AutoMapper.7.0.1\lib\net45\AutoMapper.dll</HintPath>
+    </Reference>
     <Reference Include="Castle.Core, Version=4.0.0.0, Culture=neutral, PublicKeyToken=407dd0808d44fbdc, processorArchitecture=MSIL">
       <HintPath>..\packages\Castle.Core.4.2.0\lib\net45\Castle.Core.dll</HintPath>
     </Reference>
@@ -43,6 +46,10 @@
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
     <Reference Include="System.Runtime.Remoting" />
+    <Reference Include="System.Runtime.Serialization" />
+    <Reference Include="System.ValueTuple, Version=4.0.3.0, Culture=neutral, PublicKeyToken=cc7b13ffcd2ddd51, processorArchitecture=MSIL">
+      <HintPath>..\packages\System.ValueTuple.4.5.0\lib\net461\System.ValueTuple.dll</HintPath>
+    </Reference>
     <Reference Include="System.Web" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -60,12 +67,6 @@
     <Compile Include="Managers\Interfaces\IManager.cs" />
     <Compile Include="Managers\Interfaces\IGufoVocabularyManager.cs" />
     <Compile Include="Managers\GufoVocabularyManager.cs" />
-    <Compile Include="Parsers\DeWiktionary\Classes\DeWiktionaryParser.cs" />
-    <Compile Include="Parsers\EnAcademic\Classes\EnAcademicParser.cs" />
-    <Compile Include="ParsersFactory\Factory\ParserCreator.cs" />
-    <Compile Include="Parsers\GufoMe\Classes\GufoParser.cs" />
-    <Compile Include="Parsers\Interfaces\IParser.cs" />
-    <Compile Include="ParsersFactory\Interfaces\IParserCreator.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

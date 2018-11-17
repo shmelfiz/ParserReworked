@@ -43,6 +43,8 @@ namespace GufoMeParser.BLL.Infrastructure
             }
 
             _container.Install(FromAssembly.Named("GufoMeParser.BLL"));
+            _container.Install(FromAssembly.Named("GufoMeParser.BLL.Parsers"));
+            _container.Install(FromAssembly.Named("GufoMeParser.DAL"));
         }
 
         public static void InjectDependencies(object objectToInject)
@@ -65,7 +67,7 @@ namespace GufoMeParser.BLL.Infrastructure
             {
                 var propertyValue = property.GetValue(objectToInject, null);
 
-                if(propertyValue != null)
+                if(propertyValue != null | !_container.Kernel.HasComponent(property.PropertyType))
                 {
                     return;
                 }
