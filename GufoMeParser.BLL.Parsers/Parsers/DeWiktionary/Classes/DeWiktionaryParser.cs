@@ -42,7 +42,7 @@ namespace GufoMeParser.BLL.Parsers.Parsers.DeWiktionary.Classes
 
             try
             {
-                _wordId = _askAboutWordPos ? DeWiktionaryHelper.GetWordIdForStart(_wordId) : _wordId;
+                _wordId = _askAboutWordPos ? DeWiktionaryHelper.GetWordIdForStart() : _wordId;
                 _askAboutWordPos = false;
 
                 _wordParameters = _vocabularyManager.GetWordParameters(_wordId) ?? new DeWiktionaryDataModel();
@@ -70,7 +70,7 @@ namespace GufoMeParser.BLL.Parsers.Parsers.DeWiktionary.Classes
             }
 
             var nextUrl = Defaults.DeWiktionaryStockUrl + nextWordForReq;
-            ++_wordId;
+            //++_wordId;
 
             return nextUrl;
         }
@@ -99,11 +99,11 @@ namespace GufoMeParser.BLL.Parsers.Parsers.DeWiktionary.Classes
 
         private string GetParsedTxt(string url)
         {           
-            var handler = new DeWiktionaryHandler(DeWiktionaryHelper.GetWebPage(url), _wordParameters);
+            var handler = new DeWiktionaryTxtParsingHandler(DeWiktionaryHelper.GetWebPage(url), _wordParameters);
             handler.FillWordParameters();
 
             var parsedText = $"Description: \"{_wordParameters.Description}\"; Example: \"{_wordParameters.Example}\"; " +
-                $"PartOfSpeech: \"{_wordParameters.PartOfSpeechSeit}\"; Transcription: \"{_wordParameters.Transcription}\" \n";
+                $"PartOfSpeech: \"{_wordParameters.PartOfSpeechSeit}\"; Transcription: \"{_wordParameters.Transcription}\"; WordForms: \"{_wordParameters.WordForms}\" \n";
 
             return parsedText;
         }
@@ -111,11 +111,11 @@ namespace GufoMeParser.BLL.Parsers.Parsers.DeWiktionary.Classes
         private string GetParsedHtml(string url)
         {
             var wordParametersHtml = new DeWiktionaryDataModel();
-            var handler = new DeWiktionaryHandler(DeWiktionaryHelper.GetWebPage(url), wordParametersHtml);
+            var handler = new DeWiktionaryHtmlParsingHandler(DeWiktionaryHelper.GetWebPage(url), wordParametersHtml);
             handler.FillWordParametersHtml();
 
-            var parsedHtml = $"Description: \"{_wordParameters.Description}\"; Example: \"{_wordParameters.Example}\"; " +
-                $"PartOfSpeech: \"{_wordParameters.PartOfSpeechSeit}\"; Transcription: \"{_wordParameters.Transcription}\" \n";
+            var parsedHtml = $"Description: \"{wordParametersHtml.Description}\"; Example: \"{wordParametersHtml.Example}\"; " +
+                $"PartOfSpeech: \"{wordParametersHtml.PartOfSpeechSeit}\"; Transcription: \"{wordParametersHtml.Transcription}\"; WordForms: \"{wordParametersHtml.WordForms}\" \n";
 
             return parsedHtml;
         }

@@ -17,6 +17,7 @@
         public const string DeWiktionaryTranscrXpath = "//span[@class=\"ipa\"]";
         public const string DeWiktionaryDescriptXpath = "//div[@class='mw-parser-output']//p[text() = 'Bedeutungen:']/following-sibling::dl[1]";
         public const string DeWiktionaryExampleXpath = "//div[@class='mw-parser-output']//p[text() = 'Beispiele:']/following-sibling::dl[1]";
+        public const string DeWiktionarySupsForDeleteXpath = "//div[@class='mw-parser-output']//p[text() = 'Beispiele:']/following-sibling::dl[1]//sup";
         public const string DeWiktionaryWordFormsXpath = "//div[@class='mw-parser-output']//h3/following-sibling::table";
     }
 }

@@ -62,7 +62,7 @@ namespace GufoMeParser.Core.Helpers
                         var path = new StringBuilder();
                         path.Append(savingDirectory);
                         path.Append("\\");
-                        path.Append(name);
+                        path.Append(name[0].ToString() == name[0].ToString().ToUpper() ? name + "_BIG" : name + "_SMALL");
                         path.Append(".txt");
 
                         return path.ToString();
@@ -73,7 +73,7 @@ namespace GufoMeParser.Core.Helpers
                         var path = new StringBuilder();
                         path.Append(savingDirectory);
                         path.Append("\\");
-                        path.Append(name);
+                        path.Append(name[0].ToString() == name[0].ToString().ToUpper() ? name + "_BIG" : name + "_SMALL");
                         path.Append(".txt");
 
                         return path.ToString();

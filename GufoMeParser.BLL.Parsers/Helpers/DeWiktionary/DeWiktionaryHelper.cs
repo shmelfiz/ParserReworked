@@ -13,7 +13,7 @@ namespace GufoMeParser.BLL.Parsers.Helpers.DeWiktionary
             return page;
         }
 
-        public static int GetWordIdForStart(int currentId)
+        public static int GetWordIdForStart()
         {
             Console.WriteLine("Do you wanna start parsing from first word in dict_de ?");
             Console.WriteLine("Type \"y\" or \"n\":");

@@ -53,8 +53,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Handlers\DeWiktionary\DeWiktionaryHandler.cs" />
-    <Compile Include="Handlers\Interfaces\IDeWiktionaryHandler.cs" />
+    <Compile Include="Handlers\DeWiktionary\DeWiktionaryHtmlParsingHandler.cs" />
+    <Compile Include="Handlers\DeWiktionary\DeWiktionaryTxtParsingHandler.cs" />
+    <Compile Include="Handlers\DeWiktionary\Interfaces\IDeWiktionaryHtmlParsingHandler.cs" />
+    <Compile Include="Handlers\DeWiktionary\Interfaces\IDeWiktionaryTxtParsingHandler.cs" />
     <Compile Include="Handlers\Interfaces\IHandler.cs" />
     <Compile Include="Helpers\DeWiktionary\DeWiktionaryHelper.cs" />
     <Compile Include="IoCInstaller\IoCInstaller.cs" />

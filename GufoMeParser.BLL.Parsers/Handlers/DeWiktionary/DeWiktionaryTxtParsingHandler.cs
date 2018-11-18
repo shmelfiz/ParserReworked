@@ -1,19 +1,20 @@
-﻿using GufoMeParser.BLL.Parsers.Handlers.Interfaces;
+﻿using GufoMeParser.BLL.Parsers.Handlers.DeWiktionary.Interfaces;
 using GufoMeParser.Core;
 using GufoMeParser.Core.BuisinessModels;
 using HtmlAgilityPack;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
 namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
 {
-    public class DeWiktionaryHandler : IDeWiktionaryHandler
+    public class DeWiktionaryTxtParsingHandler : IDeWiktionaryTxtParsingHandler
     {
         private DeWiktionaryDataModel _wordParameters { get; set; }
         private HtmlDocument _webPage { get; set; }
 
-        public DeWiktionaryHandler(HtmlDocument webPage, DeWiktionaryDataModel wordParameters)
+        public DeWiktionaryTxtParsingHandler(HtmlDocument webPage, DeWiktionaryDataModel wordParameters)
         {
             _wordParameters = wordParameters;
             _webPage = webPage;
@@ -32,22 +33,6 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
             catch(Exception e)
             {
                 Console.WriteLine($"Error while parsing word data. Error text: {e};");
-            }
-        }
-
-        public void FillWordParametersHtml()
-        {
-            try
-            {
-                FillPartOfSpeechHtml();
-                FillTranscriptionHtml();
-                FillDescriptionHtml();
-                FillExamplesHtml();
-                FillWordFormsHtml();
-            }
-            catch (Exception e)
-            {
-                Console.WriteLine($"Error while parsing word data html. Error text: {e};");
             }
         }
 
@@ -74,8 +59,17 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
         private void FillExamples()
         {
             var xpath = Defaults.DeWiktionaryExampleXpath;
-            _wordParameters.Example = _webPage.DocumentNode.SelectSingleNode(xpath)?.InnerText ?? string.Empty;
-            _wordParameters.Example = _wordParameters.Example.Replace("\n", "").Replace("“&#91;2&#93;", "");
+            var elementForTxtParse = _webPage.DocumentNode.SelectSingleNode(xpath);
+
+            if (elementForTxtParse == null)
+            {
+                _wordParameters.Example = string.Empty;
+                return;
+            }
+
+            RemoveSupsFromExample(elementForTxtParse);
+            _wordParameters.Example = elementForTxtParse.InnerText ?? string.Empty;
+            _wordParameters.Example = _wordParameters.Example.Replace("\n", "");
         }
 
         private void FillWordForms()
@@ -86,7 +80,7 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
                 .FirstOrDefault().ChildNodes.Where(tag => tag.Name.Equals("tr", StringComparison.InvariantCultureIgnoreCase)).ToList();
             var stringTableBuilder = new StringBuilder();
 
-            if(table == null)
+            if (table == null)
             {
                 _wordParameters.WordForms = string.Empty;
                 return;
@@ -95,13 +89,14 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
             rows.RemoveAt(0);
             foreach (var row in rows)
             {
-                var columns = row.ChildNodes.Where(tag => !tag.Name.Equals("th", StringComparison.InvariantCultureIgnoreCase) && !tag.Name.Equals("#text", StringComparison.InvariantCultureIgnoreCase)).ToList();
+                var columns = row.ChildNodes.Where(tag => !tag.Name.Equals("th", StringComparison.InvariantCultureIgnoreCase) 
+                    && !tag.Name.Equals("#text", StringComparison.InvariantCultureIgnoreCase)).ToList();
                 if (columns == null || columns.Count < 2)
                 {
                     continue;
                 }
 
-                var summedColumns = $"{columns[0].InnerText}/{columns[1].InnerText};";
+                var summedColumns = GetColumnsInnerTxt(columns).Replace("|\n", "").Replace("\n", "").Replace(" |", " ");
                 stringTableBuilder.AppendLine(summedColumns);
             }
             _wordParameters.WordForms = stringTableBuilder.ToString().Replace("\n", "").Replace("\r", "");
@@ -109,47 +104,41 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
 
         #endregion
 
-        #region Parsing Html
+        #region Accessories
 
-        private void FillPartOfSpeechHtml()
+        private void RemoveSupsFromExample(HtmlNode exampleMainNode)
         {
-            _wordParameters.PartOfSpeechSeit = _webPage.DocumentNode
-                .SelectSingleNode(Defaults.DeWiktionaryPartOfSpeechXpath)?.InnerHtml;
-        }
-
-        private void FillTranscriptionHtml()
-        {
-            _wordParameters.Transcription = _webPage.DocumentNode
-                .SelectSingleNode(Defaults.DeWiktionaryTranscrXpath)?.InnerHtml;
-        }
-
-        private void FillDescriptionHtml()
-        {
-            var xpath = Defaults.DeWiktionaryDescriptXpath;
-            _wordParameters.Description = _webPage.DocumentNode.SelectSingleNode(xpath)?.InnerHtml ?? string.Empty;
-        }
-
-        private void FillExamplesHtml()
-        {
-            var xpath = Defaults.DeWiktionaryExampleXpath;
-            _wordParameters.Example = _webPage.DocumentNode.SelectSingleNode(xpath)?.InnerHtml ?? string.Empty;
-            _wordParameters.Example = _wordParameters.Example.Replace("\n", "");
-        }
-
-        private void FillWordFormsHtml()
-        {
-            var xpath = Defaults.DeWiktionaryWordFormsXpath;
-            var table = _webPage.DocumentNode.SelectSingleNode(xpath);
-            var tBodyHtml = table?.ChildNodes.Where(tag => tag.Name.Equals("tbody", StringComparison.InvariantCultureIgnoreCase))
-                .FirstOrDefault().InnerHtml.Replace("\n", "");
-
-            if (table == null)
+            exampleMainNode.ChildNodes?.Where(node => node.Name.Equals("dd", StringComparison.InvariantCultureIgnoreCase))?.ToList().ForEach(node =>
             {
-                _wordParameters.WordForms = string.Empty;
-                return;
+                node?.ChildNodes?.Where(childNode => childNode.Name.Equals("sup", StringComparison.InvariantCultureIgnoreCase)).FirstOrDefault()?.Remove();
+            });
+        }
+
+        private string GetColumnsInnerTxt(List<HtmlNode> columns)
+        {
+            var leftColumnNodesTxt = columns[0]
+                .ChildNodes?.Where(node => !string.IsNullOrEmpty(node.InnerText) && !node.InnerText.Equals("\n")).Select(node => node.InnerText);
+            var rightColumnNodesTxt = columns[1]
+                .ChildNodes?.Where(node => !string.IsNullOrEmpty(node.InnerText) && !node.InnerText.Equals("\n")).Select(node => node.InnerText);
+
+            if(leftColumnNodesTxt.Count() == 0 | rightColumnNodesTxt.Count() == 0)
+            {
+                return string.Empty;
             }
 
-            _wordParameters.WordForms = tBodyHtml;
+            var leftColumnTxt = leftColumnNodesTxt
+                .Aggregate((cur, next) => char.IsLetter(next[0]) ? cur + "|" + next : cur + next);
+            var rightColumnTxt = rightColumnNodesTxt
+                .Aggregate((cur, next) => char.IsLetter(next[0]) ? cur + "|" + next : cur + next);
+
+            if (string.IsNullOrEmpty(leftColumnTxt) | string.IsNullOrEmpty(rightColumnTxt))
+            {
+                return string.Empty;
+            }
+
+            var summedColumns = $"{leftColumnTxt}/{rightColumnTxt};";
+
+            return summedColumns;
         }
 
         #endregion
