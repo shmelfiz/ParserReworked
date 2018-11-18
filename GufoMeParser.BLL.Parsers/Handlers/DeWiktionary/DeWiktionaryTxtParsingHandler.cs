@@ -53,7 +53,25 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
         private void FillDescription()
         {
             var xpath = Defaults.DeWiktionaryDescriptXpath;
-            _wordParameters.Description = _webPage.DocumentNode.SelectSingleNode(xpath)?.InnerText ?? string.Empty;
+            var elementForTxtParse = _webPage.DocumentNode.SelectSingleNode(xpath);
+
+            if(elementForTxtParse == null)
+            {
+                _wordParameters.Description = string.Empty;
+                return;
+            }
+
+            var childNodesWithTxt = elementForTxtParse.ChildNodes?.Where(node => node.Name.Equals("dd"));
+
+            if (childNodesWithTxt.Count() == 0)
+            {
+                _wordParameters.Example = string.Empty;
+                return;
+            }
+
+            _wordParameters.Example = childNodesWithTxt.Select(node => node.InnerText)
+                .Aggregate((current, next) => current + "; " + next)
+                .Replace("\n", "") ?? string.Empty;
         }
 
         private void FillExamples()
@@ -68,8 +86,16 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
             }
 
             RemoveSupsFromExample(elementForTxtParse);
-            _wordParameters.Example = elementForTxtParse.InnerText ?? string.Empty;
-            _wordParameters.Example = _wordParameters.Example.Replace("\n", "");
+            var childNodesWithTxt = elementForTxtParse.ChildNodes?.Where(node => node.Name.Equals("dd"));
+
+            if(childNodesWithTxt.Count() == 0)
+            {
+                _wordParameters.Example = string.Empty;
+                return;
+            }
+
+            _wordParameters.Example = childNodesWithTxt.Select(node => node.InnerText).Aggregate((current, next) => current + "; " + next)
+                .Replace("\n", "") ?? string.Empty;
         }
 
         private void FillWordForms()
