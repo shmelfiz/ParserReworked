@@ -65,11 +65,11 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
 
             if (childNodesWithTxt.Count() == 0)
             {
-                _wordParameters.Example = string.Empty;
+                _wordParameters.Description = string.Empty;
                 return;
             }
 
-            _wordParameters.Example = childNodesWithTxt.Select(node => node.InnerText)
+            _wordParameters.Description = childNodesWithTxt.Select(node => node.InnerText)
                 .Aggregate((current, next) => current + "; " + next)
                 .Replace("\n", "") ?? string.Empty;
         }
@@ -142,29 +142,26 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
 
         private string GetColumnsInnerTxt(List<HtmlNode> columns)
         {
-            var leftColumnNodesTxt = columns[0]
-                .ChildNodes?.Where(node => !string.IsNullOrEmpty(node.InnerText) && !node.InnerText.Equals("\n")).Select(node => node.InnerText);
-            var rightColumnNodesTxt = columns[1]
-                .ChildNodes?.Where(node => !string.IsNullOrEmpty(node.InnerText) && !node.InnerText.Equals("\n")).Select(node => node.InnerText);
+            var allCollsData = columns.Select(column => column.ChildNodes?
+            .Where(node => !string.IsNullOrEmpty(node.InnerText) && !node.InnerText.Equals("\n"))
+            .Select(node => node.InnerText)).ToList();
 
-            if(leftColumnNodesTxt.Count() == 0 | rightColumnNodesTxt.Count() == 0)
+            if(allCollsData.Count == 0)
             {
                 return string.Empty;
             }
 
-            var leftColumnTxt = leftColumnNodesTxt
-                .Aggregate((cur, next) => char.IsLetter(next[0]) ? cur + "|" + next : cur + next);
-            var rightColumnTxt = rightColumnNodesTxt
-                .Aggregate((cur, next) => char.IsLetter(next[0]) ? cur + "|" + next : cur + next);
-
-            if (string.IsNullOrEmpty(leftColumnTxt) | string.IsNullOrEmpty(rightColumnTxt))
+            var columnsTextBuilder = new StringBuilder();
+            allCollsData.ForEach(column =>
             {
-                return string.Empty;
-            }
+                var isItLastColumn = allCollsData.IndexOf(column) == allCollsData.Count - 1;
 
-            var summedColumns = $"{leftColumnTxt}/{rightColumnTxt};";
+                var columnTxt = column
+                .Aggregate((cur, next) => char.IsLetter(next[0]) ? cur + "|" + next : cur + next).Replace("&#32;", "");               
+                columnsTextBuilder.AppendLine(!isItLastColumn ? columnTxt + "/" : columnTxt + ";");
+            });
 
-            return summedColumns;
+            return columnsTextBuilder.ToString();
         }
 
         #endregion
