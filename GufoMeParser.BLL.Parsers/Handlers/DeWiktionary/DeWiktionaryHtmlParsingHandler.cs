@@ -39,7 +39,7 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
         private void FillPartOfSpeechHtml()
         {
             _wordParameters.PartOfSpeechSeit = _webPage.DocumentNode
-                .SelectSingleNode(Defaults.DeWiktionaryPartOfSpeechXpath)?.InnerHtml;
+                .SelectSingleNode(Defaults.DeWiktionaryPartOfSpeechXpath)?.ParentNode?.InnerHtml;
         }
 
         private void FillTranscriptionHtml()

@@ -70,7 +70,6 @@ namespace GufoMeParser.BLL.Parsers.Parsers.DeWiktionary.Classes
             }
 
             var nextUrl = Defaults.DeWiktionaryStockUrl + nextWordForReq;
-            //++_wordId;
 
             return nextUrl;
         }
@@ -103,7 +102,7 @@ namespace GufoMeParser.BLL.Parsers.Parsers.DeWiktionary.Classes
             handler.FillWordParameters();
 
             var parsedText = $"Description: \"{_wordParameters.Description}\"; Example: \"{_wordParameters.Example}\"; " +
-                $"PartOfSpeech: \"{_wordParameters.PartOfSpeechSeit}\"; Transcription: \"{_wordParameters.Transcription}\"; WordForms: \"{_wordParameters.WordForms}\" \n";
+                $"PartOfSpeechSeit: \"{_wordParameters.PartOfSpeechSeit}\"; Transcription: \"{_wordParameters.Transcription}\"; WordForms: \"{_wordParameters.WordForms}\" \n";
 
             return parsedText;
         }
@@ -115,7 +114,7 @@ namespace GufoMeParser.BLL.Parsers.Parsers.DeWiktionary.Classes
             handler.FillWordParametersHtml();
 
             var parsedHtml = $"Description: \"{wordParametersHtml.Description}\"; Example: \"{wordParametersHtml.Example}\"; " +
-                $"PartOfSpeech: \"{wordParametersHtml.PartOfSpeechSeit}\"; Transcription: \"{wordParametersHtml.Transcription}\"; WordForms: \"{wordParametersHtml.WordForms}\" \n";
+                $"PartOfSpeechSeit: \"{wordParametersHtml.PartOfSpeechSeit}\"; Transcription: \"{wordParametersHtml.Transcription}\"; WordForms: \"{wordParametersHtml.WordForms}\" \n";
 
             return parsedHtml;
         }

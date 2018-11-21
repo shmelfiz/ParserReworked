@@ -41,7 +41,8 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
         private void FillPartOfSpeech()
         {
             _wordParameters.PartOfSpeechSeit = _webPage.DocumentNode
-                .SelectSingleNode(Defaults.DeWiktionaryPartOfSpeechXpath)?.InnerText;
+                .SelectSingleNode(Defaults.DeWiktionaryPartOfSpeechXpath)?
+                .ParentNode?.InnerText;
         }
 
         private void FillTranscription()
