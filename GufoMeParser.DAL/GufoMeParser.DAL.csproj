@@ -72,10 +72,12 @@
     <Compile Include="Commands\DescrEnCommand.cs" />
     <Compile Include="Commands\DescrRuCommand.cs" />
     <Compile Include="Commands\DictWordDeCommand.cs" />
+    <Compile Include="Commands\FrAcademicAddWordCommand.cs" />
     <Compile Include="Commands\Interfaces\ICommand.cs" />
     <Compile Include="Commands\Interfaces\IDescrEnCommand.cs" />
     <Compile Include="Commands\Interfaces\IDescrRuCommand.cs" />
     <Compile Include="Commands\Interfaces\IDictWordDeCommand.cs" />
+    <Compile Include="Commands\Interfaces\IFrAcademicAddWordCommand.cs" />
     <Compile Include="Context\MySQLContext.cs" />
     <Compile Include="IoCInstaller\IoCInstaller.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />

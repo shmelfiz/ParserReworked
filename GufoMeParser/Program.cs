@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using GufoMeParser.BLL.Infrastructure;
 using GufoMeParser.BLL.Managers.Interfaces;
 using GufoMeParser.BLL.Parsers.Parsers.DeWiktionary.Classes;
+using GufoMeParser.BLL.Parsers.Parsers.FrAcademic.Classes;
 using GufoMeParser.BLL.Parsers.Parsers.GufoMe.Classes;
 using GufoMeParser.BLL.Parsers.Parsers.Interfaces;
 using GufoMeParser.BLL.ParsersFactory.Interfaces;
@@ -44,7 +45,7 @@ namespace GufoMeParser
             parser = null;
             mainUrl = string.Empty;
 
-            Console.Write("Type parser name (\"Gufo\", \"EnAcademic\", \"DeWiktionary\"): ");
+            Console.Write("Type parser name (\"Gufo\", \"EnAcademic\", \"DeWiktionary\", \"FrAcademic\"): ");
             var nameOfParser = Console.ReadLine().ToLower();
 
             var isNameParsed = Enum.TryParse(nameOfParser, out ParserName parserName);
@@ -65,13 +66,19 @@ namespace GufoMeParser
                 case ParserName.enacademic:
                     {
                         parser = _parserCreator.GetParser<EnAcademicParser>();
-                        mainUrl = Defaults.EnAcademcMainUrl;
+                        mainUrl = Defaults.EnAcademicMainUrl;
                         break;
                     }
                 case ParserName.dewiktionary:
                     {
                         parser = _parserCreator.GetParser<DeWiktionaryParser>();
                         mainUrl = Defaults.DeWiktionaryMainUrl;
+                        break;
+                    }
+                case ParserName.fracademic:
+                    {
+                        parser = _parserCreator.GetParser<FrAcademicParser>();
+                        mainUrl = Defaults.FrAcademicMainUrl;
                         break;
                     }
             }           
@@ -89,13 +96,13 @@ namespace GufoMeParser
             {
                 parser.ParseData(urls.LastOrDefault());
 
-                FileHelper.Save(parser.ParsedText, parser.ParsedPageName, ParsedDataType.ParsedTxt);
-                FileHelper.Save(parser.ParsedHtml, parser.ParsedPageName, ParsedDataType.ParsedHtml);
+                FileHelper.SaveAsync(parser.ParsedText, parser.ParsedPageName, ParsedDataType.ParsedTxt);
+                FileHelper.SaveAsync(parser.ParsedHtml, parser.ParsedPageName, ParsedDataType.ParsedHtml);
 
                 parser.SendDataToDb();
 
                 var nextUrl = parser.GetNextUrl(urls.LastOrDefault());
-                FileHelper.Save(nextUrl + "\n", "Links", ParsedDataType.ParsedLink).Wait();
+                FileHelper.SaveAsync(nextUrl + "\n", "Links", ParsedDataType.ParsedLink);
 
                 if(nextUrl.ToLower().Contains(Defaults.SuccessFinalPhrase))
                 {
@@ -119,7 +126,7 @@ namespace GufoMeParser
         {
             if(args.Cancel)
             {
-                await Task.Factory.StartNew(() =>
+                await Task.Run(() =>
                 {
                     Environment.Exit(0);
                 });

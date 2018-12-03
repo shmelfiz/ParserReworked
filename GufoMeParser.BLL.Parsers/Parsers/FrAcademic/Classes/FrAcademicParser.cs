@@ -1,5 +1,4 @@
 ﻿using GufoMeParser.BLL.Infrastructure;
-using GufoMeParser.BLL.Managers.Interfaces;
 using GufoMeParser.BLL.Parsers.Parsers.Interfaces;
 using GufoMeParser.Core;
 using HtmlAgilityPack;
@@ -7,12 +6,10 @@ using System;
 using System.Linq;
 using System.Text;
 
-namespace GufoMeParser.Parsers.BLL.Parsers.EnAcademic.Classes
+namespace GufoMeParser.BLL.Parsers.Parsers.FrAcademic.Classes
 {
-    public class EnAcademicParser : IParser
+    public class FrAcademicParser : IParser
     {
-        private IEnAcademicVocabularyManager _vocabularyManager { get; set; }
-
         #region Public properties
 
         public string ParsedPageName { get; private set; }
@@ -23,7 +20,7 @@ namespace GufoMeParser.Parsers.BLL.Parsers.EnAcademic.Classes
 
         #region Constructor
 
-        public EnAcademicParser()
+        public FrAcademicParser()
         {
             Container.InjectDependencies(this);
         }
@@ -31,26 +28,6 @@ namespace GufoMeParser.Parsers.BLL.Parsers.EnAcademic.Classes
         #endregion
 
         #region Interface implementation
-
-        public void ParseData(string url)
-        {
-            if (string.IsNullOrEmpty(url))
-            {
-                return;
-            }
-
-            try
-            {
-                ParsedPageName = GetPageName(url);
-                ParsedText = GetParsedTxt(url);
-                ParsedHtml = GetParsedHtml(url);
-            }
-            catch
-            {
-                Console.WriteLine($"Error while parsing {url}!");
-                return;
-            }
-        }
 
         public string GetNextUrl(string currentUrl)
         {
@@ -64,28 +41,35 @@ namespace GufoMeParser.Parsers.BLL.Parsers.EnAcademic.Classes
                 .Select(x => x.Attributes.FirstOrDefault()).FirstOrDefault();
 
             var parsedUrl = new StringBuilder();
-            parsedUrl.Append("\n");
+            parsedUrl.Append(Defaults.FrAcademicNewRowSymbol);
             parsedUrl.Append(parsedUrlDirty.Value);
 
             return parsedUrl.ToString();
         }
 
-        public void SendDataToDb()
+        public void ParseData(string url)
         {
-            if (string.IsNullOrEmpty(ParsedPageName) | string.IsNullOrEmpty(ParsedText) | string.IsNullOrEmpty(ParsedHtml))
+            if (string.IsNullOrEmpty(url))
             {
                 return;
             }
 
             try
             {
-                _vocabularyManager.SendData(ParsedPageName, ParsedText, ParsedHtml);
+                ParsedPageName = GetPageName(url);
+                ParsedText = string.Empty;// GetParsedTxt(url);
+                ParsedHtml = string.Empty;// GetParsedHtml(url);
             }
-            catch(Exception e)
+            catch
             {
-                Console.WriteLine($"Error while sending data to db. Error: {e}.");
+                Console.WriteLine($"Error while parsing {url}!");
                 return;
             }
+        }
+
+        public void SendDataToDb()
+        {
+            return;
         }
 
         #endregion

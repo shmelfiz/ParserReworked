@@ -39,6 +39,11 @@ namespace GufoMeParser.Helpers
                         CheckWroteByUserLinkDeWiktionary(urls);
                         return;
                     }
+                case ParserName.fracademic:
+                    {
+                        CheckWroteByUserLinkFrAcademic(urls);
+                        return;
+                    }
             }
         }
 
@@ -82,13 +87,41 @@ namespace GufoMeParser.Helpers
 
                 if (urls.Last().ToLower().Contains("continue"))
                 {
-                    Console.WriteLine(string.Format("Programm starting from start url: {0}", Defaults.EnAcademcMainUrl));
+                    Console.WriteLine(string.Format("Programm starting from start url: {0}", Defaults.EnAcademicMainUrl));
                     urls.RemoveAt(urls.IndexOf(urls.Last()));
                 }
 
-                if (urls.Count > 1 && !urls.Last().Contains(Defaults.EnAcademcStockUrl))
+                if (urls.Count > 1 && !urls.Last().Contains(Defaults.EnAcademicStockUrl))
                 {
-                    Console.WriteLine(string.Format("The link must be like: {0}", Defaults.EnAcademcMainUrl));
+                    Console.WriteLine(string.Format("The link must be like: {0}", Defaults.EnAcademicMainUrl));
+                    urls.RemoveAt(urls.IndexOf(urls.Last()));
+
+                    continue;
+                }
+
+                isRight = true;
+            }
+        }
+
+        private static void CheckWroteByUserLinkFrAcademic(List<string> urls)
+        {
+            var isRight = false;
+
+            while (isRight == false)
+            {
+                Console.Write("Insert start url (example: http://terms_en.enacademic.com/2205): ");
+                var readStartLink = Console.ReadLine();
+                urls.Add(readStartLink);
+
+                if (urls.Last().ToLower().Contains("continue"))
+                {
+                    Console.WriteLine(string.Format("Programm starting from start url: {0}", Defaults.FrAcademicMainUrl));
+                    urls.RemoveAt(urls.IndexOf(urls.Last()));
+                }
+
+                if (urls.Count > 1 && !urls.Last().Contains(Defaults.EnAcademicStockUrl))
+                {
+                    Console.WriteLine(string.Format("The link must be like: {0}", Defaults.FrAcademicMainUrl));
                     urls.RemoveAt(urls.IndexOf(urls.Last()));
 
                     continue;

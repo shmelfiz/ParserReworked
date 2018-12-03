@@ -1,4 +1,5 @@
 ﻿using GufoMeParser.BLL.Parsers.Parsers.DeWiktionary.Classes;
+using GufoMeParser.BLL.Parsers.Parsers.FrAcademic.Classes;
 using GufoMeParser.BLL.Parsers.Parsers.GufoMe.Classes;
 using GufoMeParser.BLL.Parsers.Parsers.Interfaces;
 using GufoMeParser.BLL.ParsersFactory.Interfaces;
@@ -22,6 +23,10 @@ namespace GufoMeParser.BLL.Parsers.ParsersFactory.Factory
             if (typeof(T) == typeof(DeWiktionaryParser))
             {
                 return new DeWiktionaryParser();
+            }
+            if (typeof(T) == typeof(FrAcademicParser))
+            {
+                return new FrAcademicParser();
             }
 
             throw new Exception("Name of type is incorrect!");

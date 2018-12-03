@@ -64,7 +64,7 @@ namespace GufoMeParser.BLL.Parsers.Parsers.GufoMe.Classes
             }
 
             var parsedUrlDirty = GetWebPage(currentUrl)
-                .DocumentNode.SelectNodes(Defaults.GeFoNextWordHrefXpath)
+                .DocumentNode.SelectNodes(Defaults.GuFoNextWordHrefXpath)
                 .Select(x => x.Attributes.FirstOrDefault()).FirstOrDefault();
 
             var parsedUrl = new StringBuilder();

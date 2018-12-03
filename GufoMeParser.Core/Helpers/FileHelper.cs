@@ -10,9 +10,9 @@ namespace GufoMeParser.Core.Helpers
 {
     public static class FileHelper
     {
-        private static string _parsedTxtPath = Directory.GetCurrentDirectory() + "\\SavedFiles";
-        private static string _parsedHtmlPath = Directory.GetCurrentDirectory() + "\\SavedFilesHtml";
-        private static string _parsedLinkPath = Directory.GetCurrentDirectory() + "\\LinksFile";
+        private static string _parsedTxtPath = Directory.GetCurrentDirectory() + Defaults.SavedFilesFolderName;
+        private static string _parsedHtmlPath = Directory.GetCurrentDirectory() + Defaults.SavedHtmlFilesFolderName;
+        private static string _parsedLinkPath = Directory.GetCurrentDirectory() + Defaults.SavedLinksFilesFolderName;
 
         public static List<string> GetAllTextLinesFromFile(string filePath)
         {
@@ -33,11 +33,11 @@ namespace GufoMeParser.Core.Helpers
             }
         }
 
-        public static Task Save(string text, string name, ParsedDataType fileType)
+        public static async void SaveAsync(string text, string name, ParsedDataType fileType)
         {
             var pathForSave = GetCreatedPath(name, fileType);
 
-            return WriteTextAsync(pathForSave, text);
+            await WriteTextAsync(pathForSave, text);
         }
 
         private async static Task WriteTextAsync(string filePath, string text)
@@ -62,7 +62,8 @@ namespace GufoMeParser.Core.Helpers
                         var path = new StringBuilder();
                         path.Append(savingDirectory);
                         path.Append("\\");
-                        path.Append(name[0].ToString() == name[0].ToString().ToUpper() ? name + "_BIG" : name + "_SMALL");
+                        path.Append(name[0].ToString() == name[0].ToString().ToUpper() ?
+                            name + Defaults.DeWiktionaryBigLetterFileName : name + Defaults.DeWiktionarySmallLetterFileName);
                         path.Append(".txt");
 
                         return path.ToString();
@@ -73,7 +74,8 @@ namespace GufoMeParser.Core.Helpers
                         var path = new StringBuilder();
                         path.Append(savingDirectory);
                         path.Append("\\");
-                        path.Append(name[0].ToString() == name[0].ToString().ToUpper() ? name + "_BIG" : name + "_SMALL");
+                        path.Append(name[0].ToString() == name[0].ToString().ToUpper() ?
+                            name + Defaults.DeWiktionaryBigLetterFileName : name + Defaults.DeWiktionarySmallLetterFileName);
                         path.Append(".txt");
 
                         return path.ToString();

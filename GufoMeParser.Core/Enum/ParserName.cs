@@ -4,6 +4,7 @@
     {
         gufo = 1,
         enacademic = 2,
-        dewiktionary = 3
+        dewiktionary = 3,
+        fracademic = 4
     }
 }

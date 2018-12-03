@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using GufoMeParser.Core;
 using GufoMeParser.Core.Enum;
 
 namespace GufoMeParser.FileAndDirectoryDetecting
@@ -22,13 +23,13 @@ namespace GufoMeParser.FileAndDirectoryDetecting
             {
                 case ParsedDataType.ParsedTxt:
                     {
-                        var savingDirectory = Directory.GetCurrentDirectory() + "\\SavedFiles";
+                        var savingDirectory = Directory.GetCurrentDirectory() + Defaults.SavedFilesFolderName;
 
                         return savingDirectory;
                     }
                 case ParsedDataType.ParsedHtml:
                     {
-                        var savingDirectory = Directory.GetCurrentDirectory() + "\\SavedFilesHtml";
+                        var savingDirectory = Directory.GetCurrentDirectory() + Defaults.SavedHtmlFilesFolderName;
 
                         return savingDirectory;
                     }
@@ -45,7 +46,7 @@ namespace GufoMeParser.FileAndDirectoryDetecting
                 return string.Empty;
             }
 
-            Dictionary<string, DateTime> files = new Dictionary<string, DateTime>();
+            var files = new Dictionary<string, DateTime>();
 
             foreach (string path in filesPaths)
             {
@@ -63,14 +64,14 @@ namespace GufoMeParser.FileAndDirectoryDetecting
             {
                 case (int)ParsedDataType.ParsedTxt:
                     {
-                        var savingDirectory = Directory.GetCurrentDirectory() + "\\SavedFiles";
+                        var savingDirectory = Directory.GetCurrentDirectory() + Defaults.SavedFilesFolderName;
                         var isExists = Directory.Exists(savingDirectory);
 
                         return isExists;
                     }
                 case (int)ParsedDataType.ParsedHtml:
                     {
-                        var savingDirectory = Directory.GetCurrentDirectory() + "\\SavedFilesHtml";
+                        var savingDirectory = Directory.GetCurrentDirectory() + Defaults.SavedHtmlFilesFolderName;
                         var isExists = Directory.Exists(savingDirectory);
 
                         return isExists;

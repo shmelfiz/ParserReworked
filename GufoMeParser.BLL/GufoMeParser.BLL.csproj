@@ -62,8 +62,10 @@
     <Compile Include="IoCInstaller\IoCInstaller.cs" />
     <Compile Include="Managers\DeWiktionaryVocabularyManager.cs" />
     <Compile Include="Managers\EnAcademicVocabularyManager.cs" />
+    <Compile Include="Managers\FrAcademicVocabularyManager.cs" />
     <Compile Include="Managers\Interfaces\IDeWiktionaryVocabularyManager.cs" />
     <Compile Include="Managers\Interfaces\IEnAcademicVocabularyManager.cs" />
+    <Compile Include="Managers\Interfaces\IFrAcademicVocabularyManager.cs" />
     <Compile Include="Managers\Interfaces\IManager.cs" />
     <Compile Include="Managers\Interfaces\IGufoVocabularyManager.cs" />
     <Compile Include="Managers\GufoVocabularyManager.cs" />
