@@ -2,7 +2,6 @@
 {
     public interface IParser
     {
-
         string ParsedPageName { get; }
         string ParsedText { get; }
         string ParsedHtml { get; }

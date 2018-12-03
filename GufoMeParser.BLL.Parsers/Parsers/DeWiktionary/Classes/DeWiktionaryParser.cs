@@ -3,7 +3,6 @@ using GufoMeParser.BLL.Managers.Interfaces;
 using GufoMeParser.BLL.Parsers.Parsers.Interfaces;
 using System;
 using System.Collections.Generic;
-using HtmlAgilityPack;
 using System.IO;
 using GufoMeParser.Core.Helpers;
 using GufoMeParser.Core;
@@ -15,7 +14,9 @@ namespace GufoMeParser.BLL.Parsers.Parsers.DeWiktionary.Classes
 {
     public class DeWiktionaryParser : IParser
     {
-        private readonly string wordsFilePath = Directory.GetCurrentDirectory() + "\\DeWordsFile";
+        private readonly string wordsFilePath = Directory.GetCurrentDirectory() + Defaults.DeWiktionaryFileDirectoryName;
+
+        #region Private properties
 
         private IDeWiktionaryVocabularyManager _vocabularyManager { get; set; }
         private List<string> _deWords { get; set; }
@@ -23,15 +24,27 @@ namespace GufoMeParser.BLL.Parsers.Parsers.DeWiktionary.Classes
         private int _wordId { get; set; } = 0;
         private bool _askAboutWordPos { get; set; } = true;
 
+        #endregion
+
+        #region Public properties
+
         public string ParsedPageName { get; private set; }
         public string ParsedText { get; private set; }
         public string ParsedHtml { get; private set; }
+
+        #endregion
+
+        #region Constructor
 
         public DeWiktionaryParser()
         {
             Container.InjectDependencies(this);
             _deWords = FileHelper.GetAllTextLinesFromFile(wordsFilePath);
         }
+
+        #endregion
+
+        #region Interface implementation
 
         public void ParseData(string url)
         {
@@ -66,7 +79,7 @@ namespace GufoMeParser.BLL.Parsers.Parsers.DeWiktionary.Classes
             if(string.IsNullOrEmpty(nextWordForReq))
             {
                 Console.WriteLine($"Последнее id: {_wordId}.");
-                return "complete";
+                return Defaults.SuccessFinalPhrase;
             }
 
             var nextUrl = Defaults.DeWiktionaryStockUrl + nextWordForReq;
@@ -85,6 +98,8 @@ namespace GufoMeParser.BLL.Parsers.Parsers.DeWiktionary.Classes
             _wordParameters.Condition = 2;
             _vocabularyManager.SendData(_wordParameters);
         }
+
+        #endregion
 
         #region Parse processing
 

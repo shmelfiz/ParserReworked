@@ -11,16 +11,30 @@ namespace GufoMeParser.BLL.Parsers.Parsers.GufoMe.Classes
 {
     public class GufoParser : IParser
     {
+        #region Private properties
+
         private IGufoVocabularyManager _vocabularyManager { get; set; }
+
+        #endregion
+
+        #region Public properties
 
         public string ParsedPageName { get; private set; } = string.Empty;
         public string ParsedText { get; private set; } = string.Empty;
         public string ParsedHtml { get; private set; } = string.Empty;
 
+        #endregion
+
+        #region Constructor
+
         public GufoParser()
         {
             Container.InjectDependencies(this);
         }
+
+        #endregion
+
+        #region Interface implementation
 
         public void ParseData(string url)
         {
@@ -46,11 +60,11 @@ namespace GufoMeParser.BLL.Parsers.Parsers.GufoMe.Classes
         {
             if(currentUrl.Contains(Defaults.GuFoFinalWordCode))
             {
-                return "Complete!";  //костылец
+                return Defaults.SuccessFinalPhrase;
             }
 
             var parsedUrlDirty = GetWebPage(currentUrl)
-                .DocumentNode.SelectNodes("//i[@class='fa fa-long-arrow-right']//preceding-sibling::a")
+                .DocumentNode.SelectNodes(Defaults.GeFoNextWordHrefXpath)
                 .Select(x => x.Attributes.FirstOrDefault()).FirstOrDefault();
 
             var parsedUrl = new StringBuilder();
@@ -79,24 +93,16 @@ namespace GufoMeParser.BLL.Parsers.Parsers.GufoMe.Classes
             }
         }
 
+        #endregion
+
         #region Parse processings
 
-        private string GetParsedHtml(string url)
+        private HtmlDocument GetWebPage(string url)
         {
             var web = new HtmlWeb();
             var page = web.Load(url);
-            var parsedHtml = new StringBuilder();
 
-            var parsedHtmlSplitted = page.DocumentNode
-                .SelectNodes("//p")
-                .Select(x => x.OuterHtml);
-
-            foreach (string parsedNode in parsedHtmlSplitted)
-            {
-                parsedHtml.Append(parsedNode);
-            }
-
-            return parsedHtml.ToString(); ;
+            return page;
         }
 
         private string GetPageName(string url)
@@ -104,7 +110,7 @@ namespace GufoMeParser.BLL.Parsers.Parsers.GufoMe.Classes
             try
             {
                 var parsedName = GetWebPage(url)
-                     .DocumentNode.SelectNodes("//h1")
+                     .DocumentNode.SelectNodes(Defaults.GuFoPageNameXpath)
                      .Select(x => x.InnerText).FirstOrDefault();
 
                 return parsedName;
@@ -118,7 +124,7 @@ namespace GufoMeParser.BLL.Parsers.Parsers.GufoMe.Classes
         private string GetParsedTxt(string url)
         {
             var parsedTxtDirty = GetWebPage(url)
-                .DocumentNode.SelectNodes("//p")
+                .DocumentNode.SelectNodes(Defaults.GuFoTextForParseXpath)
                 .Select(x => x.InnerText);
 
             var parsedText = new StringBuilder();
@@ -128,15 +134,25 @@ namespace GufoMeParser.BLL.Parsers.Parsers.GufoMe.Classes
                 parsedText.AppendLine(row);
             }
 
-            return parsedText.ToString().Replace("&copy; 2018 Gufo.me", "");
+            return parsedText.ToString().Replace(Defaults.GuFoCopyRightText, string.Empty);
         }
 
-        private HtmlDocument GetWebPage(string url)
+        private string GetParsedHtml(string url)
         {
             var web = new HtmlWeb();
             var page = web.Load(url);
+            var parsedHtmlBuilder = new StringBuilder();
 
-            return page;
+            var parsedHtmlSplitted = page.DocumentNode
+                .SelectNodes(Defaults.GuFoTextForParseXpath)
+                .Select(x => x.OuterHtml);
+
+            foreach (string parsedNode in parsedHtmlSplitted)
+            {
+                parsedHtmlBuilder.Append(parsedNode);
+            }
+
+            return parsedHtmlBuilder.ToString(); ;
         }
 
         #endregion

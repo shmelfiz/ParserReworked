@@ -11,14 +11,24 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
 {
     public class DeWiktionaryTxtParsingHandler : IDeWiktionaryTxtParsingHandler
     {
+        #region Private properties
+
         private DeWiktionaryDataModel _wordParameters { get; set; }
         private HtmlDocument _webPage { get; set; }
+
+        #endregion
+
+        #region Constructor
 
         public DeWiktionaryTxtParsingHandler(HtmlDocument webPage, DeWiktionaryDataModel wordParameters)
         {
             _wordParameters = wordParameters;
             _webPage = webPage;
         }
+
+        #endregion
+
+        #region Interface implementation
 
         public void FillWordParameters()
         {
@@ -35,6 +45,8 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
                 Console.WriteLine($"Error while parsing word data. Error text: {e};");
             }
         }
+
+        #endregion
 
         #region Parsing word data
 
@@ -72,7 +84,7 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
 
             _wordParameters.Description = childNodesWithTxt.Select(node => node.InnerText)
                 .Aggregate((current, next) => current + "; " + next)
-                .Replace("\n", "") ?? string.Empty;
+                .Replace("\n", string.Empty) ?? string.Empty;
         }
 
         private void FillExamples()
@@ -103,7 +115,7 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
         {
             var xpath = Defaults.DeWiktionaryWordFormsXpath;
             var table = _webPage.DocumentNode.SelectSingleNode(xpath);
-            var rows = table?.ChildNodes.Where(tag => tag.Name.Equals("tbody", StringComparison.InvariantCultureIgnoreCase))
+            var rows = table?.ChildNodes.Where(tag => tag.Name.Equals(Defaults.DeWiktionaryWordFormsTag, StringComparison.InvariantCultureIgnoreCase))
                 .FirstOrDefault().ChildNodes.Where(tag => tag.Name.Equals("tr", StringComparison.InvariantCultureIgnoreCase)).ToList();
             var stringTableBuilder = new StringBuilder();
 
@@ -123,10 +135,10 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
                     continue;
                 }
 
-                var summedColumns = GetColumnsInnerTxt(columns).Replace("|\n", "").Replace("\n", "").Replace(" |", " ");
+                var summedColumns = GetColumnsInnerTxt(columns).Replace("|\n", "").Replace(Defaults.DeWiktionaryNewRowSymbol, string.Empty).Replace(" |", " ");
                 stringTableBuilder.AppendLine(summedColumns);
             }
-            _wordParameters.WordForms = stringTableBuilder.ToString().Replace("\n", "").Replace("\r", "");
+            _wordParameters.WordForms = stringTableBuilder.ToString().Replace(Defaults.DeWiktionaryNewRowSymbol, string.Empty).Replace("\r", string.Empty);
         }
 
         #endregion
@@ -144,7 +156,7 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
         private string GetColumnsInnerTxt(List<HtmlNode> columns)
         {
             var allCollsData = columns.Select(column => column.ChildNodes?
-            .Where(node => !string.IsNullOrEmpty(node.InnerText) && !node.InnerText.Equals("\n"))
+            .Where(node => !string.IsNullOrEmpty(node.InnerText) && !node.InnerText.Equals(Defaults.DeWiktionaryNewRowSymbol))
             .Select(node => node.InnerText)).ToList();
 
             if(allCollsData.Count == 0)
@@ -158,7 +170,7 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary
                 var isItLastColumn = allCollsData.IndexOf(column) == allCollsData.Count - 1;
 
                 var columnTxt = column
-                .Aggregate((cur, next) => char.IsLetter(next[0]) ? cur + "|" + next : cur + next).Replace("&#32;", "");               
+                .Aggregate((cur, next) => char.IsLetter(next[0]) ? cur + "|" + next : cur + next).Replace("&#32;", string.Empty);               
                 columnsTextBuilder.AppendLine(!isItLastColumn ? columnTxt + "/" : columnTxt + ";");
             });
 

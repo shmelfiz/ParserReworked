@@ -97,7 +97,7 @@ namespace GufoMeParser
                 var nextUrl = parser.GetNextUrl(urls.LastOrDefault());
                 FileHelper.Save(nextUrl + "\n", "Links", ParsedDataType.ParsedLink).Wait();
 
-                if(nextUrl.ToLower().Contains("complete"))
+                if(nextUrl.ToLower().Contains(Defaults.SuccessFinalPhrase))
                 {
                     parsing = false;
                 }

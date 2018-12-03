@@ -4,6 +4,6 @@ namespace GufoMeParser.BLL.Parsers.Handlers.DeWiktionary.Interfaces
 {
     public interface IDeWiktionaryTxtParsingHandler : IHandler
     {
-        new void FillWordParameters();
+        void FillWordParameters();
     }
 }

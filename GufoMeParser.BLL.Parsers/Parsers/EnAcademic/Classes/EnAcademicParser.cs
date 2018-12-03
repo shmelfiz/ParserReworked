@@ -13,14 +13,24 @@ namespace GufoMeParser.Parsers.BLL.Parsers.EnAcademic.Classes
     {
         private IEnAcademicVocabularyManager _vocabularyManager { get; set; }
 
+        #region Public properties
+
         public string ParsedPageName { get; private set; }
         public string ParsedText { get; private set; }
         public string ParsedHtml { get; private set; }
+
+        #endregion
+
+        #region Constructor
 
         public EnAcademicParser()
         {
             Container.InjectDependencies(this);
         }
+
+        #endregion
+
+        #region Interface implementation
 
         public void ParseData(string url)
         {
@@ -46,11 +56,11 @@ namespace GufoMeParser.Parsers.BLL.Parsers.EnAcademic.Classes
         {
             if (currentUrl.Contains(Defaults.EnAcademicLastWordCode))
             {
-                return "Complete!";  //костылец
+                return Defaults.SuccessFinalPhrase;
             }
 
             var parsedUrlDirty = GetWebPage(currentUrl)
-                .DocumentNode.SelectNodes("//li[@class='next']/a")
+                .DocumentNode.SelectNodes(Defaults.EnAcademicNextWordHrefXpath)
                 .Select(x => x.Attributes.FirstOrDefault()).FirstOrDefault();
 
             var parsedUrl = new StringBuilder();
@@ -78,14 +88,22 @@ namespace GufoMeParser.Parsers.BLL.Parsers.EnAcademic.Classes
             }
         }
 
+        #endregion
+
         #region Parse processings
+
+        private HtmlDocument GetWebPage(string url)
+        {
+            var web = new HtmlWeb();
+            var page = web.Load(url);
+
+            return page;
+        }
 
         private string GetParsedTxt(string url)
         {
             var parsedTxtDirty = GetWebPage(url)
-                //.DocumentNode.SelectNodes("//meta[@name='Description']")
-                .DocumentNode.SelectNodes("//dd")
-                //.Select(x => x.GetAttributeValue("Content", "false"));
+                .DocumentNode.SelectNodes(Defaults.EnAcademicXpathForDataParse)
                 .Select(x => x.InnerText);
 
             var parsedText = new StringBuilder();
@@ -103,7 +121,7 @@ namespace GufoMeParser.Parsers.BLL.Parsers.EnAcademic.Classes
             try
             {
                 var parsedName = GetWebPage(url).DocumentNode
-                    .SelectNodes("//dt").Select(x => x.InnerText).FirstOrDefault();
+                    .SelectNodes(Defaults.EnAcademicPageNameXpath).Select(x => x.InnerText).FirstOrDefault();
 
                 return parsedName;
             }
@@ -120,7 +138,7 @@ namespace GufoMeParser.Parsers.BLL.Parsers.EnAcademic.Classes
             var parsedHtml = new StringBuilder();
 
             var parsedHtmlSplitted = page.DocumentNode
-                .SelectNodes("//dd")
+                .SelectNodes(Defaults.EnAcademicXpathForDataParse)
                 .Select(x => x.OuterHtml);
 
             foreach (string parsedNode in parsedHtmlSplitted)
@@ -129,14 +147,6 @@ namespace GufoMeParser.Parsers.BLL.Parsers.EnAcademic.Classes
             }
 
             return parsedHtml.ToString(); ;
-        }
-
-        private HtmlDocument GetWebPage(string url)
-        {
-            var web = new HtmlWeb();
-            var page = web.Load(url);
-
-            return page;
         }
 
         #endregion
